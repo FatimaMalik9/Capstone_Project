@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular app
-FROM node:18-alpine AS build
+FROM node:18.18.0 AS build
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
