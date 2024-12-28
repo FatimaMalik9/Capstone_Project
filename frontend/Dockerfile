@@ -25,7 +25,7 @@ RUN npm cache clean --force
 RUN rm -rf node_modules
 
 # Install Angular CLI
-RUN npm install -g @angular/cli@18.18.0
+RUN npm install -g @angular/cli@19.0.2
 
 # Install dependencies
 RUN npm install
