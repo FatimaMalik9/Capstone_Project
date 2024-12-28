@@ -4,18 +4,6 @@ FROM node:22.12.0 AS build
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# # Set npm config to handle timeouts and retries
-# RUN npm config set fetch-retries 5 && \
-#     npm config set fetch-retry-mintimeout 20000 && \
-#     npm config set fetch-retry-maxtimeout 120000
-
-
-# # Set npm registry
-# RUN npm config set registry https://registry.npmjs.org/
-
-# Optionally update npm to the latest version
-# RUN npm install -g npm@latest
-# RUN npm install -g npm@latest
 
 # Copy package.json and package-lock.json to the working directory
 COPY cab-booking-app/package.json ./
@@ -33,18 +21,7 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY cab-booking-app .
 
-# Build the Angular app
-# RUN ng build --configuration=production --output-path=dist/user-app
-
-# # Use nginx as the base image
-# FROM nginx:alpine
-
-# # Copy the built Angular app to nginx html directory
-# COPY --from=build /usr/src/app/dist/user-app /usr/share/nginx/html
 
 # Expose port 80 to the outside world
-EXPOSE 80
-
-# # Start nginx server
-# CMD ["nginx", "-g", "daemon off;"]
-CMD     ["ng", "serve"]
+EXPOSE 4200
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200", "--disable-host-check"]
