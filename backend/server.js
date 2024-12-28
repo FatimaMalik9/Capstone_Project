@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 // const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/myDB2';
-const mongoURI = 'mongodb+srv://fatimaumer107:GWHnkmJEyJxsgT5c@cluster0.sjhyz.mongodb.net/cabBooking?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = process.env.MONGO_URI || 'mongodb+srv://fatimaumer107:GWHnkmJEyJxsgT5c@cluster0.sjhyz.mongodb.net/cabBooking?retryWrites=true&w=majority&appName=Cluster0';
 
 
 // Middleware
