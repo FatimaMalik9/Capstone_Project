@@ -1,0 +1,41 @@
+<div class="hero">
+<h2>Admin Dashboard</h2>
+<p>Manage your cab services and view customer bookings below.</p>
+
+<!-- Section to manage cab availability -->
+<div class="cab-management mt-4">
+  <h3>Cab Availability</h3>
+  <button (click)="addCab()" class="btn btn-primary mb-3">Add Cab</button>
+  <ul>
+    <li *ngFor="let cab of cabs">
+      {{ cab.name }} - <strong>{{ cab.status }}</strong>
+      <br>
+      <button (click)="toggleCabStatus(cab)" class="btn btn-sm btn-secondary">Toggle Status</button>
+    </li>
+  </ul>
+</div>
+
+<!-- Section to view customer bookings -->
+<div class="customer-bookings mt-5">
+  <h3>Customer Bookings</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Pickup Location</th>
+        <th>Destination</th>
+        <th>Pickup Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let booking of bookings; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ booking.pickupLocation }}</td>
+        <td>{{ booking.destination }}</td>
+        <td>{{ booking.pickupTime }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+

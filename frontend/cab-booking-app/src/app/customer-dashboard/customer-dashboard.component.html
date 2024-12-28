@@ -1,0 +1,14 @@
+<div class="hero">
+<h2>Customer Dashboard</h2>
+<p>Welcome to the Customer Dashboard.</p>
+
+<div class="available-areas mt-5">
+  <h3>Available Cab Areas</h3>
+  <ul>
+    <li *ngFor="let area of availableAreas">
+      {{ area.area }} - <strong>{{ area.status }}</strong>
+    </li>
+  </ul>
+</div>
+</div>
+

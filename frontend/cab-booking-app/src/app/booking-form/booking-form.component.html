@@ -1,0 +1,27 @@
+<div class="hero">
+<form (ngSubmit)="confirmBooking()">
+  <div class="mb-3">
+    <label for="pickupLocation" class="form-label">Pickup Location</label>
+    <input type="text" class="form-control" id="pickupLocation" [(ngModel)]="pickupLocation" name="pickupLocation" required />
+  </div>
+  <div class="mb-3">
+    <label for="destination" class="form-label">Destination</label>
+    <input type="text" class="form-control" id="destination" [(ngModel)]="destination" name="destination" required />
+  </div>
+  <div class="mb-3">
+    <label for="pickupTime" class="form-label">Pickup Time</label>
+    <input type="datetime-local" class="form-control" id="pickupTime" [(ngModel)]="pickupTime" name="pickupTime" required />
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<!-- Display Confirmation Message and Details -->
+<div *ngIf="confirmationMessage" class="mt-4">
+  <h3>Booking Confirmation</h3>
+  <p>{{ confirmationMessage }}</p>
+  <div *ngIf="bookingDetails">
+    <p><strong>Pickup Location:</strong> {{ bookingDetails.pickupLocation }}</p>
+    <p><strong>Destination:</strong> {{ bookingDetails.destination }}</p>
+    <p><strong>Pickup Time:</strong> {{ bookingDetails.pickupTime }}</p>
+  </div>
+</div>
+</div>
