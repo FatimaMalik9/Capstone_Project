@@ -1,32 +1,50 @@
-# Use an official Node.js runtime as a parent image
-FROM node:latest as build
+# Use the official Angular image as a parent image
+FROM node:18.18.0 AS build
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json (if available)
-COPY package.json package-lock.json* ./
+# # Set npm config to handle timeouts and retries
+# RUN npm config set fetch-retries 5 && \
+#     npm config set fetch-retry-mintimeout 20000 && \
+#     npm config set fetch-retry-maxtimeout 120000
 
-# Install any needed packages specified in package.json
+
+# # Set npm registry
+# RUN npm config set registry https://registry.npmjs.org/
+
+# Optionally update npm to the latest version
+# RUN npm install -g npm@latest
+# RUN npm install -g npm@latest
+
+# Copy package.json and package-lock.json to the working directory
+COPY cab-booking-app/package.json ./
+
+# Clean npm cache and remove node_modules if any exist
+RUN npm cache clean --force
+RUN rm -rf node_modules
+
+# Install Angular CLI
+RUN npm install -g @angular/cli@18.18.0
+
+# Install dependencies
 RUN npm install
 
-# Copy the rest of your app's source code from your host to your image filesystem.
-COPY . .
+# Copy the rest of the application code to the working directory
+COPY cab-booking-app .
 
-# Build the project for production.
-RUN npm run build
+# Build the Angular app
+# RUN ng build --configuration=production --output-path=dist/user-app
 
-# Build the Angular app for production
-# RUN npm run build --configuration=production
-
-# Stage 2: Serve the Angular app using Nginx
+# # Use nginx as the base image
 # FROM nginx:alpine
 
-# Copy the built Angular app into Nginx's default directory
+# # Copy the built Angular app to nginx html directory
 # COPY --from=build /usr/src/app/dist/user-app /usr/share/nginx/html
 
-# Expose the default Nginx HTTP port
-# EXPOSE 80
+# Expose port 80 to the outside world
+EXPOSE 80
 
-# Start the Nginx server
+# # Start nginx server
 # CMD ["nginx", "-g", "daemon off;"]
+CMD     ["ng", "serve"]

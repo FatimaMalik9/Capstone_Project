@@ -1,31 +1,40 @@
 version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ./backend
-    ports:
-      - "3000:3000" # Expose backend server on port 3000
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/myDB2?connectTimeoutMS=30000
-      - NODE_ENV=development
-    depends_on:
-      - mongo
-
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "4200:4200" # Expose Angular app on port 4200 if running in dev mode inside the container
-    depends_on:
-      - backend
-
   mongo:
     image: mongo:latest
     ports:
       - "27017:27017"
-#     volumes:
-#       - mongo-data:/data/db
+    networks:
+      - app_networks
 
-# volumes:
-#   mongo-data: # This will persist MongoDB data
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - app_networks
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/CabBooking
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    networks:
+      - app_networks
+    depends_on:
+      - backend
+
+networks:
+  app_networks:
+    driver: bridge
+
+
+
