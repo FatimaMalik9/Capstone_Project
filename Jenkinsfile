@@ -6,21 +6,21 @@ pipeline {
             steps {
                 script {
                     // Builds Docker images and runs them
-                    sh 'docker-compose up --build -d'
+                    bat 'docker-compose up --build -d'
                 }
             }
         }
         stage('Test') {
             steps {
                 // Define tests to run inside your containers
-                sh 'echo "Running tests"'
+                bat 'echo "Running tests"'
                 // Example: sh 'docker-compose exec backend npm test'
             }
         }
         stage('Deploy') {
             steps {
                 // Deploy your application
-                sh 'echo "Deploying application"'
+                bat 'echo "Deploying application"'
             }
         }
     }
@@ -28,7 +28,7 @@ pipeline {
     post {
         always {
             // Take down the Docker containers
-            sh 'docker-compose down'
+            bat 'docker-compose down'
         }
     }
 }
