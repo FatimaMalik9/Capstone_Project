@@ -1,11 +1,11 @@
 # Stage 1: Build the Angular app
-FROM node:18.18.0 AS build
+FROM node:18 AS build
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json to the working directory
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
 # Install frontend dependencies
 RUN npm install
