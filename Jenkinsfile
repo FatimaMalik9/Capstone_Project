@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                git branch: 'main', url: 'file:///D:/New%20folder%20233/Project/Healthcare'
+                git branch: 'main', url: 'https://github.com/FatimaMalik9/Capstone_Project.git'
             }
         }
         stage('Build') {
@@ -21,7 +21,7 @@ pipeline {
         stage('Push Image') {
             steps {
                 
-                    bat "docker login -u fatimamalik1 -p fatima2939"
+                    bat "echo 'fatima2939' | docker login -u fatimamalik1 --password-stdin"
                     bat 'docker push fatimamalik1/project-backend:latest'
                     bat 'docker push fatimamalik1/project-frontend:latest'
              }
