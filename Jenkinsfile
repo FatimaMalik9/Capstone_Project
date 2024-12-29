@@ -1,77 +1,77 @@
 pipeline {
     agent any
-
-    environment {
-        // Define environment variables
-        SSH_KEY_PATH = 'D:\\cab-key.pem'
-        SSH_USER = 'ec2-user'
-        SSH_HOST = '54.227.9.117'
-    }
-
+    
     stages {
+        stage('checkout') {
+            steps {
+                git branch: 'main', url: 'file:///D:/New%20folder%20233/Project/Healthcare'
+            }
+        }
         stage('Build') {
             steps {
-                echo 'Building application...'
-                // Add your build commands here
+                bat 'docker-compose build --no-cache'
             }
         }
-
-        stage('Test') {
+        stage('Tag image') {
             steps {
-                echo 'Running tests...'
-                // Add your test commands here
+                bat 'docker tag project-frontend fatimamalik1/project-frontend'
+                bat 'docker tag project-backend fatimamalik1/project-backend'
             }
         }
-
-        stage('Deploy Backend') {
+        stage('Push Image') {
             steps {
-                script {
-                    echo 'Deploying Cab Booking Backend to AWS EC2...'
-                    sshagent(['SSH_KEY_PATH']) {
-                        bat """
-                        set SSH_CMD=ssh -i %SSH_KEY_PATH% -o StrictHostKeyChecking=no %SSH_USER%@%SSH_HOST%
-                        call %SSH_CMD% ^
-                        docker stop cab-booking-backend || true ^
-                        docker rm cab-booking-backend || true ^
-                        cd /var/www/cab-booking-backend ^
-                        docker build -t cab-booking-backend . ^
-                        docker run -d -p 3000:3000 cab-booking-backend
-                        """
-                    }
-                }
-            }
+                
+                    bat "docker login -u fatimamalik1 -p fatima2939"
+                    bat 'docker push fatimamalik1/project-backend:latest'
+                    bat 'docker push fatimamalik1/project-frontend:latest'
+             }
         }
-
-        stage('Deploy Frontend') {
+        
+        stage('Deploy') {
             steps {
-                script {
-                    echo 'Deploying Cab Booking Frontend to AWS EC2...'
-                    sshagent(['SSH_KEY_PATH']) {
-                        bat """
-                        set SSH_CMD=ssh -i %SSH_KEY_PATH% -o StrictHostKeyChecking=no %SSH_USER%@%SSH_HOST%
-                        call %SSH_CMD% ^
-                        docker stop cab-booking-frontend || true ^
-                        docker rm cab-booking-frontend || true ^
-                        cd /var/www/cab-booking-frontend ^
-                        docker build -t cab-booking-frontend . ^
-                        docker run -d -p 80:80 cab-booking-frontend
-                        """
-                    }
-                }
-            }
-        }
-    }
+                bat """
+            ssh -i ${SSH_KEY_PATH} -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} ^ 
+            "docker stop project-frontend-1 || true && ^
+            docker rm project-frontend-1 || true && ^
+            docker rmi fatimamalik1/project-frontend:latest || true && ^
+            docker pull fatimamalik1/project-frontend:latest && ^
+            docker run -d --name project-frontend-1 -p 4200:4200 fatimamalik1/project-frontend:latest"
+            """
 
-    post {
-        always {
-            echo 'Cleaning up...'
-            // Add any cleanup steps if necessary
-        }
-        success {
-            echo 'Deployment completed successfully.'
-        }
-        failure {
-            echo 'Deployment failed.'
+            bat """
+            ssh -i ${SSH_KEY_PATH} -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} ^ 
+            "docker stop project-backend-1 || true && ^
+            docker rm project-backend-1 || true && ^
+            docker rmi fatimamalik1/project-backend:latest || true && ^
+            docker pull fatimamalik1/project-backend:latest && ^
+            docker run -d --name project-backend-1 -p 3000:3000 fatimamalik1/project-backend:latest"
+            """
+            }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
